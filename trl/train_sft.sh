@@ -1,0 +1,28 @@
+accelerate launch \
+  --config_file examples/accelerate_configs/fsdp1_8gpu.yaml trl/scripts/sft.py \
+  --model_name_or_path ThaiLLM/ThaiLLM-8B \
+  --dtype auto \
+  --attn_implementation kernels-community/flash-attn2 \
+  --dataset_name scb10x/typhoon-s-instruct-post-training \
+  --dataset_train_split sft \
+  --learning_rate 2e-5 \
+  --gradient_checkpointing false \
+  --per_device_train_batch_size 1 \
+  --gradient_accumulation_steps 4 \
+  --save_strategy epoch \
+  --save_steps 1 \
+  --packing \
+  --save_only_model \
+  --save_total_limit 2 \
+  --eos_token '<|im_end|>' \
+  --num_train_epochs 2 \
+  --use_liger_kernel \
+  --optim adamw_torch_fused \
+  --eval_strategy no \
+  --max_length 16384 \
+  --logging_steps 1 \
+  --seed 42 \
+  --warmup_ratio 0.05 \
+  --lr_scheduler_type cosine \
+  --report_to wandb \
+  --output_dir outputs/typhoon-s-sft-ckpt

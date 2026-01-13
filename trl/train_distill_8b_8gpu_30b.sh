@@ -1,0 +1,36 @@
+accelerate launch \
+  --config_file examples/accelerate_configs/fsdp1_8gpu_cpu.yaml trl/experimental/gkd2/gkd.py \
+  --model_name_or_path typhoon-s-sft-ckpt \
+  --dtype auto \
+  --attn_implementation kernels-community/flash-attn2 \
+  --dataset_name scb10x/typhoon-s-instruct-post-training \
+  --dataset_train_split distill \
+  --learning_rate 1e-6 \
+  --gradient_checkpointing \
+  --per_device_train_batch_size 1 \
+  --gradient_accumulation_steps 8 \
+  --teacher_micro_batch_size 1 \
+  --save_steps 500 \
+  --num_train_epochs 1 \
+  --eval_strategy no \
+  --temperature 1.0 \
+  --top_p 0.95 \
+  --top_k 0 \
+  --max_completion_length 2048 \
+  --max_length 4096 \
+  --lmbda 0.25 \
+  --beta 0.0 \
+  --teacher_model_name_or_path Qwen/Qwen3-30B-A3B-Instruct-2507 \
+  --logging_steps 1 \
+  --optim adamw_torch_fused \
+  --teacher_logits_cpu \
+  --use_vllm \
+  --vllm_mode colocate \
+  --vllm_gpu_memory_utilization 0.1 \
+  --vllm_tensor_parallel_size 8 \
+  --seed 42 \
+  --warmup_ratio 0.05 \
+  --save_only_model \
+  --lr_scheduler_type cosine \
+  --report_to wandb \
+  --output_dir outputs/typhoon-s-8b-final

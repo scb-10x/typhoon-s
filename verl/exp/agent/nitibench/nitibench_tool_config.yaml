@@ -1,0 +1,43 @@
+tools:
+  - class_name: "verl.tools.search_tool.SearchTool"
+    config:
+      type: native
+      retrieval_service_url: "http://localhost:8932/search"
+      topk: 3
+      num_workers: 10
+      rate_limit: 100
+      timeout: 30
+    tool_schema:
+      type: "function"
+      function:
+        name: "search_law"
+        description: "Searches for relevant Thai laws based on queries."
+        parameters:
+          type: "object"
+          properties:
+            query_list:
+              type: "array"
+              items:
+                type: "string"
+              description: "List of search queries"
+          required: ["query_list"]
+  - class_name: "verl.tools.read_tool.ReadTool"
+    config:
+      type: native
+      retrieval_service_url: "http://localhost:8932/read"
+      timeout: 30
+    tool_schema:
+      type: "function"
+      function:
+        name: "read_law"
+        description: "Reads the full content of a specific law section."
+        parameters:
+          type: "object"
+          properties:
+            law_name:
+              type: "string"
+              description: "The name of the law to read."
+            section_num:
+              type: "string"
+              description: "The section number to read (optional)."
+          required: ["law_name"]

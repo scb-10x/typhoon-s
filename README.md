@@ -1,30 +1,50 @@
-# Typhoon-S: Open Framework for Sovereign Language Models
+# Typhoon S: Open Minimal Post-Training for Sovereign Large Language Models
 
-## The Challenge
+## Overview
 
-LLM development remains concentrated on English and Chinese, leaving other languages underserved. Even GPT-4 achieves only 25% accuracy on Thai legal reasoning—far from production-ready. Two barriers prevent widespread sovereign LLM development:
+**Typhoon S** provides a minimal and reproducible post-training recipe tailored for **sovereign deployments**—settings where a country, institution, or domain owner must retain control over model weights and training data while operating under strict resource constraints (e.g., academic-scale compute).
 
-1. **Resource Intensity:** Modern LLMs require GPU clusters beyond most academic budgets
-2. **Technical Opacity:** Leading models rarely disclose training recipes or data pipelines
+We demonstrate that competitive instruction-following and frontier capabilities (reasoning, agents) can be achieved without massive general-purpose corpora or complex proprietary pipelines.
 
-Result: Sovereign models lag in general capabilities, limiting practical adoption.
+## Project Structure
 
-## Our Approach
+This repository is divided into two main components corresponding to the two core capabilities required for sovereign LLMs:
 
-Typhoon-S demonstrates that **academic-scale resources can produce competitive sovereign models**. We focus on:
+### 1. Adoptability (Base $\rightarrow$ General Assistant)
+**Location:** [`trl/`](trl/)
 
-1. **Base-to-Instruct Pipeline:** 2-step approach (SFT + On-Policy Distillation) with full code. (**Available in `trl/`**)
-2. **Pushing the Frontier in Domain-Specific:** RFT with pretraining and multi-turn RFT. (*Coming Soon*)
+Focuses on transforming a base model into a general-purpose instruction-following assistant. 
+- **Method:** Lightweight Supervised Fine-Tuning (SFT) followed by **On-Policy Distillation (OPD)**.
+- **Key Insight:** Full-logits OPD significantly improves robustness (e.g., code-switching) and general performance compared to SFT alone.
+- **Resources:** Implemented using HuggingFace TRL and Transformers.
 
-**Language-Agnostic:** While focused on Thai, the pipeline works for any language—just bring your own data.
+### 2. Sovereign Capability (Domain Specialization)
+**Location:** [`verl/`](verl/)
 
-## Reference Implementation
+Focuses on enhancing performance on locally critical tasks (e.g., legal reasoning, cultural knowledge) that are often underrepresented in base models.
+- **Method:** Small-scale Reinforcement Fine-Tuning (**RFT**) using **GRPO**.
+- **Extensions:** 
+  - **RFT + Pretraining:** Parallel next-token prediction on in-domain text to inject local knowledge.
+  - **Agentic RFT:** Multi-turn tool use optimization (search, read) for retrieval-augmented generation.
+- **Resources:** Built on top of [veRL](https://github.com/volcengine/verl).
 
-**Typhoon-S-ThaiLLM-8B-Instruct 🇹🇭** demonstrates competitive performance with state-of-the-art open-weight models on both Thai-specific and general benchmarks. Full release (data, code, technical report) in January 2026.
+## Key Results
 
-## 🛠️ Getting Started
+- **Efficiency:** The entire pipeline is designed for academic resources (< 1 week of 8-GPU training for an 8B model).
+- **Performance:** 
+  - **Adoptability:** Successfully transforms sovereign base models (e.g., ThaiLLM) into instruction-tuned models competing with global open-weight models.
+  - **Sovereign Capability:** RFT with parallel pretraining improves local legal reasoning and domain knowledge retention.
 
-- [trl/](trl/) - Complete SFT + GKD2 (On-Policy Distillation) training pipeline
+## Models & Resources
+
+- **HuggingFace:** [`Typhoon-S-8B-Instruct`](https://huggingface.co/typhoon-ai/typhoon-s-thaillm-8b-instruct-research-preview)
+- **Technical Report:** [Coming Soon]
+
+## Getting Started
+
+Please refer to the `README.md` in the respective subdirectories:
+- Go to [`trl/`](trl/) for SFT and On-Policy distillation recipes.
+- Go to [`verl/`](verl/) for RFT and Agentic training recipes.
 
 ---
 **Status:** 🚧 Active Development | Full release January 2026

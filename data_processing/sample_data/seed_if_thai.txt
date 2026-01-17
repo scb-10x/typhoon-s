@@ -1,0 +1,30 @@
+Ensure the response contains exactly 100 words, with word count easily verifiable.
+Limit the response to 5 paragraphs, with each paragraph consisting of exactly 3 sentences.
+Ensure the response includes the keyword "ประเทศไทย" at least twice and "วัฒนธรรม" only once.
+Do not include the keyword "การเมือง" anywhere in the response.
+Add the placeholder "[...]" after every third sentence in the response.
+Use curly brackets "{...}" around any mention of a Thai city name.
+Insert the symbol "๐" between every two sentences in the response.
+Add the word "ครับ" or "ค่ะ" after every sentence ending with a verb.
+Ensure the response ends with a sentence starting with the word "สุดท้าย."
+Limit the response to exactly 200 characters, excluding spaces.
+Ensure every second sentence begins with the keyword "ความ."
+Refrain from using the word "ประเทศ" anywhere in the response.
+Ensure the response ends with a Thai proverb, but include "[END]" right after the proverb.
+Include the placeholder "[เช็ค]" at the end of each paragraph.
+Ensure every sentence in the response has exactly 15 words.
+Add the Thai symbol "ๆ" after every fifth word in the response.
+Use a placeholder "{จบ}" at the end of the last sentence in the response.
+Ensure that each sentence begins and ends with the same Thai word.
+Add the symbol "..." after every occurrence of the word "ภาษาไทย."
+Format the response so the word "ประเทศไทย" appears exactly once in each paragraph.
+Use the word "วิทยาศาสตร์" in the response, but no more than twice.
+Ensure that the response ends with the word "ทั้งหมด."
+Insert the placeholder "[ยังไม่เสร็จ]" in the middle of the third sentence.
+Limit the response to exactly 8 sentences, with each sentence containing the word "ความคิด."
+Add square brackets "[...]" around any instance of the word "ประชาธิปไตย."
+Ensure that the word "ราชวงศ์" appears exactly once in the response and in the final sentence.
+Place a period "." after every occurrence of the word "อาหาร."
+Include the placeholder "[ใส่ข้อความที่นี่]" after any sentence mentioning the word "การศึกษา."
+Ensure the last paragraph contains exactly 5 sentences, with one instance of the keyword "เศรษฐกิจ."
+Ensure that the response ends with the Thai phrase "นี่คือคำตอบสุดท้าย."

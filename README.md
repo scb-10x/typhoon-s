@@ -1,50 +1,132 @@
-# Typhoon S: Open Minimal Post-Training for Sovereign Large Language Models
+# Typhoon-S: Minimal Open Post-Training for Sovereign Large Language Models
+
+**Official code release for the paper**: *"Typhoon-S: Minimal Open Post-Training for Sovereign Large Language Models"*
+
+Minimal and reproducible post-training recipes for **sovereign settings**—scenarios requiring control over model weights, training data, and methods under resource constraints. Demonstrates that careful post-training design can achieve competitive performance without massive-scale data or compute.
+
+**Key Results:**
+- Section 2: Transform base → instruct models in **2 days on 8×H100** (8B model)
+- Strong Thai performance while maintaining general capabilities
+- Section 3: Achieve **78% accuracy** on Thai legal reasoning (4B model, exceeding GPT-5's 75%)
+- No catastrophic forgetting after domain specialization
+
+**Setting:** Academic-scale resources (4-8×H100 GPUs), Thai as representative low-resource language
 
 ## Overview
 
-**Typhoon S** provides a minimal and reproducible post-training recipe tailored for **sovereign deployments**—settings where a country, institution, or domain owner must retain control over model weights and training data while operating under strict resource constraints (e.g., academic-scale compute).
+This repository contains two complementary post-training recipes:
 
-We demonstrate that competitive instruction-following and frontier capabilities (reasoning, agents) can be achieved without massive general-purpose corpora or complex proprietary pipelines.
+### 1. Adoptability: Base → Instruct ([`trl/`](trl/))
+Transform base models into general-purpose instruction-following assistants.
 
-## Project Structure
+**Method:** SFT + On-Policy Distillation (OPD)
+- **Data:** 340k samples
+- **Teacher:** Qwen3-30B-A3B-Instruct-2507
+- **Training:** ~2 days on 8×H100 (8B model)
 
-This repository is divided into two main components corresponding to the two core capabilities required for sovereign LLMs:
+**Scripts:** [`train_sft.sh`](trl/train_sft.sh), [`train_distill_8b_8gpu_30b.sh`](trl/train_distill_8b_8gpu_30b.sh)
 
-### 1. Adoptability (Base $\rightarrow$ General Assistant)
-**Location:** [`trl/`](trl/)
+### 2. Sovereign Capability: Domain Specialization ([`verl/`](verl/))
+Enhance performance on region-specific tasks (legal reasoning, cultural knowledge).
 
-Focuses on transforming a base model into a general-purpose instruction-following assistant. 
-- **Method:** Lightweight Supervised Fine-Tuning (SFT) followed by **On-Policy Distillation (OPD)**.
-- **Key Insight:** Full-logits OPD significantly improves robustness (e.g., code-switching) and general performance compared to SFT alone.
-- **Resources:** Implemented using HuggingFace TRL and Transformers.
+**Method:** InK-GRPO (Injected Knowledge GRPO)
+- **Innovation:** Augments GRPO with stochastic next-token prediction loss
+- **Agentic RFT:** Multi-turn tool use with RAG (search + read tools)
+- **Training:** ~1 day on 4×H100 (4B model)
+- **Results:** +4% over GRPO, 78% on Thai legal tasks
 
-### 2. Sovereign Capability (Domain Specialization)
-**Location:** [`verl/`](verl/)
+**Experiments:** [`verl/exp/`](verl/exp/)
 
-Focuses on enhancing performance on locally critical tasks (e.g., legal reasoning, cultural knowledge) that are often underrepresented in base models.
-- **Method:** Small-scale Reinforcement Fine-Tuning (**RFT**) using **GRPO**.
-- **Extensions:** 
-  - **RFT + Pretraining:** Parallel next-token prediction on in-domain text to inject local knowledge.
-  - **Agentic RFT:** Multi-turn tool use optimization (search, read) for retrieval-augmented generation.
-- **Resources:** Built on top of [veRL](https://github.com/volcengine/verl).
+## Installation
 
-## Key Results
+```bash
+# Clone repository
+git clone https://github.com/scb-10x/typhoon-s
+cd typhoon-s
 
-- **Efficiency:** The entire pipeline is designed for academic resources (< 1 week of 8-GPU training for an 8B model).
-- **Performance:** 
-  - **Adoptability:** Successfully transforms sovereign base models (e.g., ThaiLLM) into instruction-tuned models competing with global open-weight models.
-  - **Sovereign Capability:** RFT with parallel pretraining improves local legal reasoning and domain knowledge retention.
+# Install dependencies for SFT+OPD (Section 2: Adoptability)
+cd trl
+pip install -e .
+pip install -r requirements.txt
 
-## Models & Resources
+# Install dependencies for InK-GRPO (Section 3: Sovereign Capability)
+cd ../verl
+pip install -e .
+pip install -r requirements.txt
 
-- **HuggingFace:** [`Typhoon-S-8B-Instruct`](https://huggingface.co/typhoon-ai/typhoon-s-thaillm-8b-instruct-research-preview)
-- **Technical Report:** [Coming Soon]
+# Install dependencies for data processing
+cd ../data_processing
+pip install openai transformers torch jsonlines tqdm fasttext huggingface-hub
+```
 
-## Getting Started
+**Hardware Requirements:** 4-8×H100 GPUs (or equivalent), 80GB VRAM per GPU recommended
 
-Please refer to the `README.md` in the respective subdirectories:
-- Go to [`trl/`](trl/) for SFT and On-Policy distillation recipes.
-- Go to [`verl/`](verl/) for RFT and Agentic training recipes.
+## Quick Start
 
----
-**Status:** 🚧 Active Development | Full release January 2026
+### 1. Adoptability Training (Base → Instruct)
+```bash
+cd trl
+
+# Stage 1: SFT (Supervised Fine-Tuning)
+bash train_sft.sh
+
+# Stage 2: OPD (On-Policy Distillation)
+bash train_distill_8b_8gpu_30b.sh
+```
+
+See [`trl/README.md`](trl/README.md) and [`data_processing/README.md`](data_processing/README.md) for details.
+
+### 2. Sovereign Capability Training (InK-GRPO)
+```bash
+cd verl/exp
+# Configure your experiment (see verl/exp/ for examples)
+bash train_xxx.sh
+```
+
+See [`verl/README.md`](verl/README.md) for VERL usage.
+
+### 3. Evaluation (For Section 3: Sovereign Capability)
+
+See [`evaluation/README.md`](evaluation/README.md) for complete evaluation instructions.
+
+## Resources
+
+🤗 **Hugging Face:**
+- [Model Collection](https://huggingface.co/collections/typhoon-ai/typhoon-s)
+- [Typhoon-S-8B-Instruct](https://huggingface.co/typhoon-ai/typhoon-s-thaillm-8b-instruct-research-preview)
+- [Typhoon-S-4B-Legal-Agent](https://huggingface.co/typhoon-ai/typhoon-s-4b-nitibench-ccl-legal-agent-research-preview)
+- [Section2 Training Datasets](https://huggingface.co/datasets/typhoon-ai/typhoon-s-instruct-post-training)
+- [Section3 Training & Evaluation Dataset](https://huggingface.co/datasets/typhoon-ai/typhoon-s-sovereign-capability-dataset)
+
+🌐 [Project Website](http://opentyphoon.ai) | 📄 [Paper (arXiv)](...)
+
+## Repository Structure
+
+```
+├── trl/                   # Adoptability: SFT + OPD training
+├── verl/                  # Sovereign Capability: InK-GRPO + Agentic RFT  
+├── data_processing/       # AutoIF pipeline for target-language datasets
+├── evaluation/            # Evaluation scripts and benchmarks
+└── paper_content.tex      # Full paper LaTeX source
+```
+
+## Citation
+
+If you use this code or models, please cite:
+
+```bibtex
+
+```
+
+## License
+
+This project is licensed under the Apache License 2.0. See:
+- Main project: [LICENSE](LICENSE)
+- TRL components: [trl/LICENSE](trl/LICENSE)
+- veRL components: [verl/LICENSE](verl/LICENSE)
+
+Data processing and evaluation scripts follow the main [LICENSE](LICENSE).
+
+## Contact
+
+For questions or issues, please open a GitHub issue or visit [opentyphoon.ai](http://opentyphoon.ai).

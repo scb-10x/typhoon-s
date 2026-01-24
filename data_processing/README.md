@@ -41,12 +41,3 @@ python 001_autoif_pipeline_step6-8.py \
     --max_items 1000 \
     --num_workers 16
 ```
-
-See `--help` for full parameters or run `bash example.sh` for complete pipeline.
-
-## Features
-
-- Cross-lingual robustness via constraint mixing
-- Quality control: rejection sampling (≥7/10)
-- Automatic caching (`cache_step1to5/`, `cache/`)
-- GPU-accelerated NLI filtering (CPU fallback)

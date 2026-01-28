@@ -115,7 +115,15 @@ See [`evaluation/README.md`](evaluation/README.md) for complete evaluation instr
 If you use this code or models, please cite:
 
 ```bibtex
-
+@misc{pipatanakul2026typhoonsminimalopenposttraining,
+      title={Typhoon-S: Minimal Open Post-Training for Sovereign Large Language Models}, 
+      author={Kunat Pipatanakul and Pittawat Taveekitworachai},
+      year={2026},
+      eprint={2601.18129},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2601.18129}, 
+}
 ```
 
 ## License

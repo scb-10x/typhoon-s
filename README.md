@@ -1,5 +1,7 @@
 # Typhoon-S: Minimal Open Post-Training for Sovereign Large Language Models
 
+This repository is archived and released as-is. If you’re interested in this work, please contact us.
+
 **Official code release for the paper**: *"Typhoon-S: Minimal Open Post-Training for Sovereign Large Language Models"*
 
 Minimal and reproducible post-training recipes for **sovereign settings**—scenarios requiring control over model weights, training data, and methods under resource constraints. Demonstrates that careful post-training design can achieve competitive performance without massive-scale data or compute.

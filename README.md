@@ -1,6 +1,8 @@
 # Typhoon-S: Minimal Open Post-Training for Sovereign Large Language Models
 
-This repository is archived and released as-is. If you’re interested in this work, please contact us.
+**This repository is archived and released as-is. If you’re interested in this work, please contact us.**
+
+---
 
 **Official code release for the paper**: *"Typhoon-S: Minimal Open Post-Training for Sovereign Large Language Models"*
 
